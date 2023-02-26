@@ -20,7 +20,7 @@ function App() {
 
 	async function getTokenBalance() {
 		const config = {
-			apiKey: 'sufd7iQIMIlROiEZyAG17IGvWjKl9470',
+			apiKey: import.meta.env.REACT_APP_ALCHEMY_KEY,
 			network: Network.ETH_MAINNET,
 		};
 
@@ -95,5 +95,5 @@ function App() {
 		</Box>
 	);
 }
-ERC - 20 - Token - Indexer;
+
 export default App;
