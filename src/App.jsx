@@ -24,6 +24,8 @@ import { useState } from 'react';
 function App() {
 	const [userAddress, setUserAddress] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
+	const [walletAddress, setWallet] = useState('');
+	const [status, setStatus] = useState('');
 	const [error, setError] = useState('');
 	const [hasQueried, setHasQueried] = useState(false);
 	const [hideSmallBalances, setHideSmallBalances] = useState(true);
@@ -47,10 +49,9 @@ function App() {
 				});
 				const obj = {
 					status: '👆🏽 Write a message in the text-field above.',
-					setUserAddress: addressArray[0],
+					address: addressArray[0],
 				};
-				const setw = obj.setUserAddress;
-				return setUserAddress(setw);
+				return obj;
 			} catch (err) {
 				return {
 					address: '',
@@ -74,19 +75,26 @@ function App() {
 			};
 		}
 	};
+
+	const connectWalletPressed = async () => {
+		const walletResponse = await connectWallet();
+		setWallet(walletResponse.address);
+		// setStatus(walletResponse.status);
+	};
+
 	async function getNftsOwned() {
 		setError('');
 		setIsLoading(true);
 		setHasQueried(false);
 		setNftResults([]);
 
-		if (userAddress.length == 0) {
+		if (walletAddress.length == 0) {
 			showError('Please enter an address');
 			return;
 		}
 
 		try {
-			var data = await alchemy.nft.getNftsForOwner(userAddress);
+			var data = await alchemy.nft.getNftsForOwner(walletAddress);
 			if (!data || data.length == 0) {
 				showError('No NFTs found');
 				return;
@@ -110,13 +118,13 @@ function App() {
 		setHasQueried(false);
 		setTokenResults([]);
 
-		if (userAddress.length == 0) {
+		if (walletAddress.length == 0) {
 			showError('Please enter an address');
 			return;
 		}
 
 		try {
-			var data = await alchemy.core.getTokenBalances(userAddress);
+			var data = await alchemy.core.getTokenBalances(walletAddress);
 			if (!data || data.length == 0) {
 				showError('No balances found');
 				return;
@@ -206,14 +214,14 @@ function App() {
 								<Button
 									fontSize={{ base: '11px', md: 'md', lg: 'xl' }}
 									w={{ base: '33vw', md: '40vw', lg: '28vw' }}
-									onClick={connectWallet}
+									onClick={connectWalletPressed}
 									className='metamask'
 								>
 									Get address via MetaMask
 								</Button>
 								<label htmlFor={'addressInput'}>or enter address:</label>
 								<Input
-									onChange={(e) => setUserAddress(e.target.value)}
+									onChange={(e) => setWallet(e.target.value)}
 									onKeyDown={(event) => {
 										onEnterKeyPressRun(event, getTokenBalance);
 									}}
@@ -224,7 +232,7 @@ function App() {
 									textAlign='center'
 									p={4}
 									bgColor='white'
-									value={userAddress}
+									value={walletAddress}
 									placeholder='0xabc...'
 								/>
 							</HStack>
@@ -315,7 +323,7 @@ function App() {
 								<Button
 									fontSize={{ base: '11px', md: 'md', lg: 'xl' }}
 									w={{ base: '33vw', md: '40vw', lg: '28vw' }}
-									onClick={connectWallet}
+									onClick={connectWalletPressed}
 									bgColor='darkOrange'
 									className='metamask'
 								>
@@ -323,7 +331,7 @@ function App() {
 								</Button>
 								<label htmlFor={'addressInput'}>or enter address:</label>
 								<Input
-									onChange={(e) => setUserAddress(e.target.value)}
+									onChange={(e) => setWallet(e.target.value)}
 									onKeyDown={(event) => {
 										onEnterKeyPressRun(event, getNftsOwned);
 									}}
@@ -334,7 +342,7 @@ function App() {
 									textAlign='center'
 									p={4}
 									bgColor='white'
-									value={userAddress}
+									value={walletAddress}
 									placeholder='0xabc...'
 								/>
 							</HStack>
