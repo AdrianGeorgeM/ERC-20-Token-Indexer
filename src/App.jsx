@@ -21,20 +21,22 @@ function App() {
 	async function getTokenBalance() {
 		const config = {
 			apiKey: import.meta.env.REACT_APP_ALCHEMY_KEY,
-			network: Network.ETH_MAINNET,
+			network: Network.goerli,
 		};
 
-		const alchemy = new Alchemy(config);
-		const data = await alchemy.core.getTokenBalances(userAddress);
+		const alchemy = new Alchemy(config); // Create an Alchemy instance with your API key and network
+		const data = await alchemy.core.getTokenBalances(userAddress); // Get the token balances for the address
+		console.log('data', data);
+		setResults(data); // Set the results to the state variable
 
-		setResults(data);
-
-		const tokenDataPromises = [];
+		const tokenDataPromises = []; // Create an array to store promises for token data
 
 		for (let i = 0; i < data.tokenBalances.length; i++) {
-			const tokenData = alchemy.core.getTokenMetadata(
-				data.tokenBalances[i].contractAddress
-			);
+			// Loop through the token balances
+			const tokenBalance = data.tokenBalances[i]; // Get the token balance object
+			console.log('tokenBalance', tokenBalance);
+			const tokenData = alchemy.core.getTokenMetadata(tokenBalance.contractAddress);
+			console.log('tokenData', tokenData);
 			tokenDataPromises.push(tokenData);
 		}
 
@@ -74,6 +76,7 @@ function App() {
 				{hasQueried ? (
 					<SimpleGrid w={'90vw'} columns={4} spacing={24}>
 						{results.tokenBalances.map((e, i) => {
+							console.log(e);
 							return (
 								<Flex flexDir={'column'} color='white' bg='blue' w={'20vw'} key={e.id}>
 									<Box>
