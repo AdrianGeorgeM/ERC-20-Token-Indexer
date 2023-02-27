@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { Alchemy, Network, Utils } from 'alchemy-sdk';
 import { useState } from 'react';
-import { connectWallet, addWalletListener } from './util/interact.jsx';
+import { connectWallet } from './util/interact.jsx';
 function App() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [walletAddress, setWallet] = useState('');
@@ -58,7 +58,8 @@ function App() {
 		}
 
 		try {
-			var data = await alchemy.nft.getNftsForOwner(walletAddress);
+			const data = await alchemy.nft.getNftsForOwner(walletAddress);
+			console.log('data', data);
 			if (!data || data.length == 0) {
 				showError('No NFTs found');
 				return;
@@ -116,9 +117,6 @@ function App() {
 		setIsLoading(false);
 	}
 
-	addWalletListener(address, status);
-
-	console.log('tokenDataObjects', addWalletListener(setWallet));
 	//use formatUnits(), then cut the number of decimal places down
 	function prettyBalance(numberAsString, index, decimalPlaces) {
 		const str = Utils.formatUnits(
