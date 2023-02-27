@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { Alchemy, Network, Utils } from 'alchemy-sdk';
 import { useState } from 'react';
-import { connectWallet } from './util/interact.jsx';
+import { connectWallet, addWalletListener } from './util/interact.jsx';
 function App() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [walletAddress, setWallet] = useState('');
@@ -116,6 +116,9 @@ function App() {
 		setIsLoading(false);
 	}
 
+	addWalletListener(address, status);
+
+	console.log('tokenDataObjects', addWalletListener(setWallet));
 	//use formatUnits(), then cut the number of decimal places down
 	function prettyBalance(numberAsString, index, decimalPlaces) {
 		const str = Utils.formatUnits(
