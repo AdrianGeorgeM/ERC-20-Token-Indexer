@@ -22,9 +22,7 @@ import { Alchemy, Network, Utils } from 'alchemy-sdk';
 import { useState } from 'react';
 
 function App() {
-	const [userAddress, setUserAddress] = useState(
-		'0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266'
-	);
+	const [userAddress, setUserAddress] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [hasQueried, setHasQueried] = useState(false);
@@ -41,18 +39,41 @@ function App() {
 	//configuration
 	const minimumValueToShow = 0.0001;
 
-	async function getAddressFromMetamask() {
-		const addressArray = await window.ethereum.request({
-			method: 'eth_requestAccounts',
-		});
-
-		if (addressArray.length == 0) {
-			showError("MetaMask didn't return any addresses");
-			return;
+	const connectWallet = async () => {
+		if (window.ethereum) {
+			try {
+				const addressArray = await window.ethereum.request({
+					method: 'eth_requestAccounts',
+				});
+				const obj = {
+					status: '👆🏽 Write a message in the text-field above.',
+					setUserAddress: addressArray[0],
+				};
+				const setw = obj.setUserAddress;
+				return setUserAddress(setw);
+			} catch (err) {
+				return {
+					address: '',
+					status: '😥 ' + err.message,
+				};
+			}
+		} else {
+			return {
+				address: '',
+				status: (
+					<span>
+						<p>
+							{' '}
+							🦊{' '}
+							<a target='_blank' href={`https://metamask.io/download.html`}>
+								You must install Metamask, a virtual Ethereum wallet, in your browser.
+							</a>
+						</p>
+					</span>
+				),
+			};
 		}
-		setUserAddress(addressArray[0]);
-	}
-
+	};
 	async function getNftsOwned() {
 		setError('');
 		setIsLoading(true);
@@ -185,7 +206,7 @@ function App() {
 								<Button
 									fontSize={{ base: '11px', md: 'md', lg: 'xl' }}
 									w={{ base: '33vw', md: '40vw', lg: '28vw' }}
-									onClick={getAddressFromMetamask}
+									onClick={connectWallet}
 									className='metamask'
 								>
 									Get address via MetaMask
@@ -294,7 +315,7 @@ function App() {
 								<Button
 									fontSize={{ base: '11px', md: 'md', lg: 'xl' }}
 									w={{ base: '33vw', md: '40vw', lg: '28vw' }}
-									onClick={getAddressFromMetamask}
+									onClick={connectWallet}
 									bgColor='darkOrange'
 									className='metamask'
 								>
