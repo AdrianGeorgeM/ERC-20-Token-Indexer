@@ -22,7 +22,6 @@ import { Alchemy, Network, Utils } from 'alchemy-sdk';
 import { useState } from 'react';
 import { connectWallet } from './util/interact.jsx';
 function App() {
-	const [userAddress, setUserAddress] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [walletAddress, setWallet] = useState('');
 	const [status, setStatus] = useState('');
@@ -45,47 +44,6 @@ function App() {
 		const walletResponse = await connectWallet();
 		setWallet(walletResponse.address);
 		// setStatus(walletResponse.status);
-	};
-
-	const getCurrentWalletConnected = async () => {
-		if (window.ethereum) {
-			try {
-				const addressArray = await window.ethereum.request({
-					method: 'eth_accounts',
-				});
-				if (addressArray.length > 0) {
-					return {
-						address: addressArray[0],
-						status: '👆🏽 Write a message in the text-field above.',
-					};
-				} else {
-					return {
-						address: '',
-						status: '🦊 Connect to Metamask using the top right button.',
-					};
-				}
-			} catch (err) {
-				return {
-					address: '',
-					status: '😥 ' + err.message,
-				};
-			}
-		} else {
-			return {
-				address: '',
-				status: (
-					<span>
-						<p>
-							{' '}
-							🦊{' '}
-							<a target='_blank' href={`https://metamask.io/download.html`}>
-								You must install Metamask, a virtual Ethereum wallet, in your browser.
-							</a>
-						</p>
-					</span>
-				),
-			};
-		}
 	};
 
 	async function getNftsOwned() {
