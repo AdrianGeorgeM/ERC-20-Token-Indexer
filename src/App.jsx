@@ -13,7 +13,9 @@ import { Alchemy, Network, Utils } from 'alchemy-sdk';
 import { useState } from 'react';
 
 function App() {
-	const [userAddress, setUserAddress] = useState('');
+	const [userAddress, setUserAddress] = useState(
+		'0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266'
+	);
 	const [results, setResults] = useState([]);
 	const [hasQueried, setHasQueried] = useState(false);
 	const [tokenDataObjects, setTokenDataObjects] = useState([]);
