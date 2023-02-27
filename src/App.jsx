@@ -33,8 +33,8 @@ function App() {
 	const [tokenDataObjects, setTokenDataObjects] = useState([]);
 
 	const alchemy = new Alchemy({
-		// apiKey: 'sufd7iQIMIlROiEZyAG17IGvWjKl9470',
-		network: Network.ETH_MAINNET,
+		apiKey: 'sufd7iQIMIlROiEZyAG17IGvWjKl9470',
+		network: Network.ETH_GOERLI,
 	});
 
 	//configuration
@@ -154,6 +154,7 @@ function App() {
 		setHasQueried(false);
 		setIsLoading(false);
 	}
+	// console.log('tokenDataObjects', tokenDataObjects);
 	return (
 		<>
 			{error.length > 0 && (
