@@ -117,7 +117,6 @@ function App() {
 		setIsLoading(false);
 	}
 
-	//use formatUnits(), then cut the number of decimal places down
 	function prettyBalance(numberAsString, index, decimalPlaces) {
 		const str = Utils.formatUnits(
 			numberAsString,
@@ -140,6 +139,7 @@ function App() {
 		return pretty;
 	}
 
+	//
 	function onEnterKeyPressRun(event, nextFunction) {
 		if (event.key === 'Enter') {
 			event.preventDefault();
